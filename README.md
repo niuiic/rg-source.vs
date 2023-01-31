@@ -1,2 +1,3 @@
-# rg.vs
-riggrep source for vscode
+# rg-source.vs
+
+ripgrep source for vscode
