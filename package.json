@@ -4,42 +4,55 @@
   "description": "ripgrep source for vscode",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:rg-source.helloWorld"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "rg-source.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "rg-source.rgPath": {
+      "type": "string",
+      "default": "rg",
+      "description": "Absolute path to ripgrep"
+    },
+    "rg-source.prefixLen": {
+      "type": "number",
+      "default": 4,
+      "description": "Completion would be triggered when the prefix length is longer than prefixLen"
+    },
+    "rg-source.wordPattern": {
+      "type": "string",
+      "default": "[a-zA-Z0-9\\-_]",
+      "description": "characters valid in a word"
+    },
+    "rg-source.timeout": {
+      "type": "number",
+      "default": 5000,
+      "description": "timeout for rg command"
+    }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "publish": "pnpm compile && pnpm vsce publish --no-dependencies",
+    "package": "pnpm compile && pnpm vsce package --no-dependencies"
   },
   "devDependencies": {
-    "@types/vscode": "^1.74.0",
-    "@types/glob": "^8.0.0",
+    "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@typescript-eslint/eslint-plugin": "^5.45.0",
-    "@typescript-eslint/parser": "^5.45.0",
-    "eslint": "^8.28.0",
-    "glob": "^8.0.3",
-    "mocha": "^10.1.0",
-    "typescript": "^4.9.3",
-    "@vscode/test-electron": "^2.2.0"
+    "@types/node": "~16.18.12",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
+    "@vscode/test-electron": "^2.2.3",
+    "@vscode/vsce": "^2.17.0",
+    "eslint": "^8.33.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5"
   }
 }

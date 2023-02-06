@@ -1,25 +1,61 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode'
+import { rg } from './job'
+import { config } from './config'
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "rg-source" is now active!')
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('rg-source.helloWorld', () => {
-    // The code you place here will be executed every time your command is executed
-    // Display a message box to the user
-    vscode.window.showInformationMessage('Hello World from rg-source!')
-  })
-
-  context.subscriptions.push(disposable)
+export const activate = async (context: vscode.ExtensionContext) => {
+  context.subscriptions.push(
+    vscode.languages.registerCompletionItemProvider(
+      { scheme: 'file' },
+      {
+        provideCompletionItems
+      }
+    )
+  )
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export const deactivate = () => {}
+
+const provideCompletionItems: vscode.CompletionItemProvider<vscode.CompletionItem>['provideCompletionItems'] = async (
+  document,
+  position,
+  _token,
+  _context
+) => {
+  const word = getWord(document, position)
+  if (word.length >= config.prefixLen() && vscode.workspace.workspaceFolders !== undefined) {
+    try {
+      const outStr = await rg({
+        rgPath: config.rgPath(),
+        text: word,
+        cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
+        wordPattern: config.wordPattern(),
+        timeout: config.timeout()
+      })
+      const outStrArr = outStr.split('\n').slice(0, outStr.split('\n').length - 1)
+      const outObjArr = outStrArr.map((v: string) => JSON.parse(v))
+      const matchObjArr = outObjArr.filter((v: { type: string }) => v.type === 'match')
+      const matchStrArr = matchObjArr.map((v) => v.data.submatches[0].match.text)
+      const uniqueMatchStrArr: string[] = []
+      for (const v of matchStrArr) {
+        if (!uniqueMatchStrArr.includes(v)) {
+          uniqueMatchStrArr.push(v)
+        }
+      }
+      const source = uniqueMatchStrArr.map((v) => new vscode.CompletionItem(v, vscode.CompletionItemKind.Text))
+      return source
+    } catch {
+      return []
+    }
+  }
+  return []
+}
+
+const getWord = (document: vscode.TextDocument, position: vscode.Position): string => {
+  const line = document.lineAt(position)
+  const wordRange = document.getWordRangeAtPosition(position, /\w[-\w\.]*/g)
+  if (!wordRange) {
+    return ''
+  } else {
+    return line.text.substring(wordRange.start.character, wordRange.end.character)
+  }
+}
