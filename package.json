@@ -8,7 +8,7 @@
     "ripgrep",
     "completion"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "niuiic",
   "engines": {
     "vscode": "^1.75.0"
