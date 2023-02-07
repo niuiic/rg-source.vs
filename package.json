@@ -2,7 +2,14 @@
   "name": "rg-source",
   "displayName": "rg-source",
   "description": "ripgrep source for vscode",
-  "version": "0.0.1",
+  "keywords": [
+    "vscode",
+    "plugin",
+    "ripgrep",
+    "completion"
+  ],
+  "version": "0.1.0",
+  "publisher": "niuiic",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -12,27 +19,44 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "icon": "icon.png",
   "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niuiic/rg-source.vs"
+  },
+  "homepage": "https://github.com/niuiic/rg-source.vs",
   "contributes": {
-    "rg-source.rgPath": {
-      "type": "string",
-      "default": "rg",
-      "description": "Absolute path to ripgrep"
-    },
-    "rg-source.prefixLen": {
-      "type": "number",
-      "default": 4,
-      "description": "Completion would be triggered when the prefix length is longer than prefixLen"
-    },
-    "rg-source.wordPattern": {
-      "type": "string",
-      "default": "[a-zA-Z0-9\\-_]",
-      "description": "characters valid in a word"
-    },
-    "rg-source.timeout": {
-      "type": "number",
-      "default": 5000,
-      "description": "timeout for rg command"
+    "configuration": {
+      "type": "object",
+      "title": "rg-source",
+      "properties": {
+        "rg-source.rgPath": {
+          "type": "string",
+          "default": "rg",
+          "description": "Absolute path to ripgrep"
+        },
+        "rg-source.prefixLen": {
+          "type": "number",
+          "default": 4,
+          "description": "Completion would be triggered when the prefix length is longer than prefixLen"
+        },
+        "rg-source.wordPattern": {
+          "type": "string",
+          "default": "[a-zA-Z0-9\\-_]",
+          "description": "characters valid in a word"
+        },
+        "rg-source.timeout": {
+          "type": "number",
+          "default": 5000,
+          "description": "timeout for rg command"
+        },
+        "rg-source.caseSensitive": {
+          "type": "boolean",
+          "default": true,
+          "description": "search case sensitive"
+        }
+      }
     }
   },
   "scripts": {
