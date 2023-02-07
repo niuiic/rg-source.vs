@@ -29,7 +29,8 @@ const provideCompletionItems: vscode.CompletionItemProvider<vscode.CompletionIte
         text: word,
         cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
         wordPattern: config.wordPattern(),
-        timeout: config.timeout()
+        timeout: config.timeout(),
+        caseSensitive: config.caseSensitive()
       })
       const outStrArr = outStr.split('\n').slice(0, outStr.split('\n').length - 1)
       const outObjArr = outStrArr.map((v: string) => JSON.parse(v))

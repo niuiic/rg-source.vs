@@ -6,10 +6,14 @@ export const rg = (args: {
   cwd: string
   wordPattern: string
   timeout: number
+  caseSensitive: boolean
 }): Promise<string> => {
   return new Promise((resolve, reject) => {
+    const command = args.caseSensitive
+      ? `${args.rgPath} -e "\\b(${args.text}${args.wordPattern}+)\\b" --json .`
+      : `${args.rgPath} -e "\\b(${args.text}${args.wordPattern}+)\\b" -S --json .`
     exec(
-      `${args.rgPath} -e "\\b(${args.text}${args.wordPattern}+)\\b" --json .`,
+      command,
       {
         cwd: args.cwd,
         timeout: args.timeout
