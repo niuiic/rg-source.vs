@@ -12,3 +12,11 @@ Search for complete words in the workspace based on the entered partial word and
 
 1. Install ripgrep.
 2. Set `rgPath` as the absolute path to `rg`.
+
+## Known Issues
+
+- extension doesn't' seem to be working
+
+vscode only triggers the completion provider with the highest priority.
+
+[vscode-issue](https://github.com/microsoft/vscode/issues/21611) here.
