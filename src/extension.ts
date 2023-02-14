@@ -42,7 +42,9 @@ const provideCompletionItems: vscode.CompletionItemProvider<vscode.CompletionIte
           uniqueMatchStrArr.push(v)
         }
       }
-      const source = uniqueMatchStrArr.map((v) => new vscode.CompletionItem(v, vscode.CompletionItemKind.Text))
+      const source = uniqueMatchStrArr.map(
+        (v) => new vscode.CompletionItem({ label: v, description: 'rg' }, vscode.CompletionItemKind.Text)
+      )
       return source
     } catch {
       return []
