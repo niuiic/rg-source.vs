@@ -2,6 +2,8 @@
 
 ripgrep source for vscode
 
+Search for complete words in the workspace based on the entered partial word and then provide completion items.
+
 ## Dependencies
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
