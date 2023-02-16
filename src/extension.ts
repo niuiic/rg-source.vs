@@ -3,14 +3,33 @@ import { rg } from './job'
 import { config } from './config'
 
 export const activate = async (context: vscode.ExtensionContext) => {
+  const schemed: Record<'language' | 'scheme', string>[] = []
+  let langs = await vscode.languages.getLanguages()
+  langs.push('*')
+  langs = langs.filter((l) => l.toLowerCase() !== 'php')
+  const schemes = ['file', 'untitled', 'http', 'https', 'ftp']
+  langs.forEach((l) => {
+    schemes.forEach((s) => {
+      schemed.push({ language: l, scheme: s })
+    })
+  })
+
   context.subscriptions.push(
-    vscode.languages.registerCompletionItemProvider(
-      { scheme: 'file' },
-      {
-        provideCompletionItems
-      }
-    )
+    vscode.languages.registerCompletionItemProvider(schemed, {
+      provideCompletionItems
+    })
   )
+  schemes.forEach((s) => {
+    context.subscriptions.push(
+      vscode.languages.registerCompletionItemProvider(
+        { language: 'php', scheme: s },
+        {
+          provideCompletionItems
+        },
+        ...'$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      )
+    )
+  })
 }
 
 export const deactivate = () => {}
