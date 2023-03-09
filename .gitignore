@@ -105,6 +105,7 @@ dist
 
 # editor
 .nvim/
+.vscode/
 
 # output
 out/
