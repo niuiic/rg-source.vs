@@ -6,7 +6,6 @@ export const activate = async (context: vscode.ExtensionContext) => {
   const schemed: Record<'language' | 'scheme', string>[] = []
   let langs = await vscode.languages.getLanguages()
   langs.push('*')
-  langs = langs.filter((l) => l.toLowerCase() !== 'php')
   const schemes = ['file', 'untitled', 'http', 'https', 'ftp']
   langs.forEach((l) => {
     schemes.forEach((s) => {
@@ -19,17 +18,6 @@ export const activate = async (context: vscode.ExtensionContext) => {
       provideCompletionItems
     })
   )
-  schemes.forEach((s) => {
-    context.subscriptions.push(
-      vscode.languages.registerCompletionItemProvider(
-        { language: 'php', scheme: s },
-        {
-          provideCompletionItems
-        },
-        ...'$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      )
-    )
-  })
 }
 
 export const deactivate = () => {}
